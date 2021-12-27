@@ -23,9 +23,21 @@ def _sizeof_fmt(num, suffix="B"):
     return "%.1f%s%s" % (num, "Yi", suffix)
 
 
-def get_summary_rss(ps_output_file_path: str) -> str:
-    """put your code here"""
+path = os.path.abspath("output_file.txt")
+
+
+def get_summary_rss(path):
+    with open(path) as file:
+        memory = [lines.split()[5] for lines in file.readlines()]
+        memory_sum = sum(map(int, memory[1:]))
+        print("Суммарный объём потребляемой памяти:")
+        print(memory_sum * 1024, 'байт')
+        print(memory_sum, 'килобайт')
+        print((memory_sum / 1024).__round__(2), 'мегабайт')
+        print((memory_sum / 1024 / 1024).__round__(2), 'гигабайт')
 
 
 if __name__ == "__main__":
-    print(get_summary_rss("<place ps aux output file path here>"))
+    get_summary_rss(path)
+
+

@@ -17,8 +17,7 @@ result_text -- первые SIZE символов файла . Если разм
 Перенос строки нужно осуществить с помощью html тэга <br>
 
 PS в python абсолютный путь до файла можно узнать вот так
->>> import os
->>> print(os.path.abspath('<some_file_name>'))
+
 
 """
 import os
@@ -29,9 +28,12 @@ app = Flask(__name__)
 
 
 @app.route("/head_file/<int:size>/<path:relative_path>")
-def head_file(size: int, relative_path: str):
-    """put your code here"""
+def head_file(size, relative_path):
+    abs_path = os.path.abspath('text.txt')
+    file = open(relative_path).read()
+    return f"Абсолютный путь: <b>{abs_path}</b> <p>Длина в символах: {str(len(file))}</p> <p>Первые {size} символов файла: {file[0:size+1]}</p>"
 
 
 if __name__ == "__main__":
     app.run(debug=True)
+

@@ -27,6 +27,25 @@
 
 """
 
+string = ".т..К.ш..а.ь..ж.д.е..я..ы.й.н.. .с.б..и.м.ц..в.о.з..л.й.."
 
-def decrypt(s: str) -> str:
-    """Put your code here"""
+
+def decrypt(string):
+    result = []
+    for char in string:
+        result.append(char)
+        if len(result) > 2 and (result[-1], result[-2]) == (".", "."):
+            result.pop()
+            result.pop()
+            if result:
+                result.pop()
+    letters = []
+    for char in result:
+        if char != ".":
+            letters.append(char)
+
+    return "".join(letters)
+
+
+print(decrypt(string))
+

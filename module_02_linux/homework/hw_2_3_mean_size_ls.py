@@ -5,10 +5,16 @@ $ ls -l ./
 """
 import os
 
+ls_output_path = os.path.abspath("output_dir_avg.txt")
 
-def get_mean_size(ls_output_path: str) -> float:
-    """Put your code here"""
+
+def get_mean_size(ls_output_path):
+    with open(ls_output_path) as file:
+        memory = [lines.split()[4] for lines in file.readlines()[1:]]
+        memory_sum = sum(map(int, memory))
+        print("Средний размер файла в папке:")
+        print((memory_sum / len(memory) / 1024).__round__(2), 'мегабайт')
 
 
 if __name__ == "__main__":
-    print(get_mean_size("<place ls output file path here>"))
+    get_mean_size(ls_output_path)

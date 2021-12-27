@@ -12,6 +12,9 @@
 YYYYMMDD , где YYYY -- год, MM -- месяц (число от 1 до 12), DD -- число (от 01 до 31)
 Гарантируется, что переданная дата -- корректная (никаких 31 февраля)
 """
+import datetime
+import calendar
+
 from flask import Flask
 
 app = Flask(__name__)
@@ -20,19 +23,35 @@ storage = {}
 
 
 @app.route("/add/<date>/<int:number>")
-def add(date: str, number: int):
-    # put something here
+def add(date, number):
+    date_iso = "%s-%s-%s" % (date[0:4], date[4:6], date[6:8])
+    datetime_object = datetime.datetime.strptime(date_iso, '%Y-%m-%d')
+    storage["date"] = datetime_object
+    storage["number"] = number
+    return f"{storage['date']} {storage['number']}"
 
 
 @app.route("/calculate/<int:year>")
-def calculate_year(year: int):
-    # put something here
+def calculate_year(year):
+
+    current = datetime.date.today()
+    user_date_plus_one = datetime.date(year=storage["date"].year + 1, month=1, day=1)
+    user_date = datetime.date(year=year, month=1, day=1)
+
+    if current.year == user_date.year:
+        current_year_delta_days = current - user_date
+        return f"Суммарные траты за {year} год: {str(current_year_delta_days.days * int(storage['number'])).split()[0]} рублей"
+    else:
+        other_year_delta_days = user_date_plus_one - user_date
+        return f"Суммарные траты за {year} год: {str(other_year_delta_days.days * int(storage['number'])).split()[0]} рублей"
 
 
 @app.route("/calculate/<int:year>/<int:month>")
-def calculate_month(year: int, month: int):
-    # put something here
+def calculate_month(year, month):
+    days = calendar.monthrange(year, month)
+    return f"Суммарные траты за {year}-{month}: {days[1] * int(storage['number'])} рублей"
 
 
 if __name__ == "__main__":
     app.run(debug=True)
+

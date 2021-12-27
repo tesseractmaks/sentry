@@ -2,10 +2,7 @@
 Напишите  hello-world endpoint , который возвращал бы строку "Привет, <имя>. Хорошей пятницы!".
 Вместо хорошей пятницы, endpoint должен уметь желать хорошего дня недели в целом, на русском языке.
 Текущий день недели можно узнать вот так:
->>> import datetime
->>> print(datetime.datetime.today().weekday())
 """
-
 import datetime
 
 from flask import Flask
@@ -13,9 +10,20 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route("/hello-world/...")
-def hello_world() -> str:
-    """Put your code here"""
+@app.route("/hello-world")
+def hello_world():
+    day = datetime.datetime.today().weekday()
+    week = {
+        0: 'Хорошего Понедельника',
+        1: 'Хорошего Вторника',
+        2: 'Хорошей Среды',
+        3: 'Хорошего Четверга',
+        4: 'Хорошей Пятницы',
+        5: 'Хорошей Субботы',
+        6: 'Хорошего Воскресенья',
+    }
+
+    return f"Привет, Влад. {week[day]}!"
 
 
 if __name__ == "__main__":
