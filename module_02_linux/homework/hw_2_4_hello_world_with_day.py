@@ -10,8 +10,8 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route("/hello-world")
-def hello_world():
+@app.route("/hello-world/<username>")
+def hello_world(username):
     day = datetime.datetime.today().weekday()
     week = {
         0: 'Хорошего Понедельника',
@@ -23,7 +23,7 @@ def hello_world():
         6: 'Хорошего Воскресенья',
     }
 
-    return f"Привет, Влад. {week[day]}!"
+    return f"Привет, {username}. {week[day]}!"
 
 
 if __name__ == "__main__":
