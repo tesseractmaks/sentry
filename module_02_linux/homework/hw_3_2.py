@@ -14,6 +14,7 @@ YYYYMMDD , где YYYY -- год, MM -- месяц (число от 1 до 12), 
 """
 import datetime
 import calendar
+import re
 
 from flask import Flask
 
@@ -24,8 +25,18 @@ storage = {}
 
 @app.route("/add/<date>/<int:number>")
 def add(date, number):
-    date_iso = "%s-%s-%s" % (date[0:4], date[4:6], date[6:8])
-    datetime_object = datetime.datetime.strptime(date_iso, '%Y-%m-%d')
+
+    try:
+        if re.findall(r"\b[\d+]{8}\b", date):
+            date_iso = "%s-%s-%s" % (date[0:4], date[4:6], date[6:8])
+    except ValueError("Дата передаётся в формате YYYYMMDD,") as exc:
+        raise exc
+    except ValueError as exc:
+        raise exc
+    try:
+        datetime_object = datetime.datetime.strptime(date_iso, '%Y-%m-%d')
+    except ValueError as exc:
+        raise exc
     storage["date"] = datetime_object
     storage["number"] = number
     return f"{storage['date']} {storage['number']}"
@@ -33,7 +44,6 @@ def add(date, number):
 
 @app.route("/calculate/<int:year>")
 def calculate_year(year):
-
     current = datetime.date.today()
     user_date_plus_one = datetime.date(year=storage["date"].year + 1, month=1, day=1)
     user_date = datetime.date(year=year, month=1, day=1)
@@ -54,4 +64,3 @@ def calculate_month(year, month):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
