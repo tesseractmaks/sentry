@@ -15,18 +15,20 @@ class TestCalculate(unittest.TestCase):
 
     def setUp(self):
         self.datetime_object = datetime.datetime.strptime(self.date_iso, '%Y-%m-%d')
-        self.datetime_str = datetime.datetime.strftime(self.datetime_object, '%Y-%m-%d')
         app.config['TESTING'] = True
         app.config['DEBUG'] = False
         self.app_context = app.app_context()
         self.app_context.push()
         self.app = app.test_client()
+        self.base_url_calculate = "/calculate/"
+        self.base_url = "/add/"
+        self.base_url_add = "/add/"
 
     def test_add(self):
-        base_url = "/add/"
-        response = self.app.get(f"{base_url + self.storage['date']}/{self.storage['number']}")
+        datetime_str = datetime.datetime.strftime(self.datetime_object, '%Y-%m-%d')
+        response = self.app.get(f"{self.base_url + self.storage['date']}/{self.storage['number']}")
         response_text = response.data.decode()
-        self.assertTrue(self.datetime_str in response_text)
+        self.assertTrue(datetime_str in response_text)
         self.assertTrue(self.storage['number'] in response_text)
 
     def calculate_year(self):
@@ -43,20 +45,18 @@ class TestCalculate(unittest.TestCase):
 
     def test_calculate_year(self):
         calculate = self.calculate_year()
-        base_url = "/calculate/"
         year = str(self.datetime_object.year)
-        response = self.app.get(f"{base_url}{year}")
+        response = self.app.get(f"{self.base_url_calculate}{year}")
         response_text = response.data.decode()
         self.assertTrue(year in response_text)
         self.assertEqual(calculate, '73000')
 
     def test_calculate_month(self):
-        base_url = "/calculate/"
         year = self.datetime_object.year
         month = self.datetime_object.month
         days = calendar.monthrange(year, month)
         calculate_month = days[1] * int(self.storage['number'])
-        response = self.app.get(f"{base_url}{year}/{month}")
+        response = self.app.get(f"{self.base_url_calculate}{year}/{month}")
         response_text = response.data.decode()
         self.assertTrue(str(year) in response_text)
         self.assertTrue(str(month) in response_text)
@@ -71,9 +71,9 @@ class TestCalculate(unittest.TestCase):
             "date": "20210170",
             "number": "200",
         }
-        base_url = "/add/"
+
         with self.assertRaises(ValueError):
-            response = self.app.get(f"{base_url + storage['date']}/{storage['number']}")
+            response = self.app.get(f"{self.base_url_add + storage['date']}/{storage['number']}")
             response_text = response.data.decode()
             app.add(response_text)
 
@@ -82,9 +82,8 @@ class TestCalculate(unittest.TestCase):
             "date": "",
             "number": "",
         }
-        base_url = "/add/"
         with self.assertRaises(AttributeError):
-            response = self.app.get(f"{base_url + storage['date']}/{storage['number']}")
+            response = self.app.get(f"{self.base_url + storage['date']}/{storage['number']}")
             response_text = response.data.decode()
             app.add(response_text)
 
