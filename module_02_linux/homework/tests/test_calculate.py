@@ -11,14 +11,9 @@ class TestCalculate(unittest.TestCase):
         "date": "20210110",
         "number": "200",
     }
-
-
     date_iso = "%s-%s-%s" % (storage["date"][0:4], storage["date"][4:6], storage["date"][6:8])
-    # datetime_object = datetime.datetime.strptime(date_iso, '%Y-%m-%d')
-    # datetime_str = datetime.datetime.strftime(datetime_object, '%Y-%m-%d')
 
     def setUp(self):
-        # self.date_iso = "%s-%s-%s" % (self.storage["date"][0:4], self.storage["date"][4:6], self.storage["date"][6:8])
         self.datetime_object = datetime.datetime.strptime(self.date_iso, '%Y-%m-%d')
         self.datetime_str = datetime.datetime.strftime(self.datetime_object, '%Y-%m-%d')
         app.config['TESTING'] = True
@@ -68,15 +63,8 @@ class TestCalculate(unittest.TestCase):
         self.assertEqual(calculate_month, 6200)
 
     def test_add_validate_date(self):
-        base_url = "/add/"
-        response = self.app.get(f"{base_url + self.storage['date']}/{self.storage['number']}")
-        response_text = response.data.decode()
-        date_iso = "%s-%s-%s" % (self.storage["date"][0:4], self.storage["date"][4:6], self.storage["date"][6:8])
-        datetime_object = datetime.datetime.strptime(date_iso, '%Y-%m-%d')
-        datetime_str = datetime.datetime.strftime(datetime_object, '%Y-%m-%d')
-        self.assertTrue(datetime_str in response_text)
         valid_date = re.search(r"\b[\d+]{8}\b", self.storage['date']).group()
-        self.assertEqual(str(valid_date), self.storage['date'])
+        self.assertEqual(valid_date, self.storage['date'])
 
     def test_add_no_valid_date(self):
         storage = {

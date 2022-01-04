@@ -27,7 +27,7 @@ storage = {}
 def add(date, number):
 
     try:
-        if re.findall(r"\b[\d+]{8}\b", date):
+        if re.search(r"\b[\d+]{8}\b", date).group():
             date_iso = "%s-%s-%s" % (date[0:4], date[4:6], date[6:8])
     except ValueError("Дата передаётся в формате YYYYMMDD,") as exc:
         raise exc
