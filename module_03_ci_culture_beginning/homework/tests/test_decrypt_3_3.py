@@ -1,6 +1,6 @@
 import unittest
 
-from homework.hw_3_3 import decrypt
+from homework.task_decrypt import decrypt
 
 
 class TestDecrypt(unittest.TestCase):
