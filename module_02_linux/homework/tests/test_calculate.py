@@ -17,8 +17,6 @@ class TestCalculate(unittest.TestCase):
         self.datetime_object = datetime.datetime.strptime(self.date_iso, '%Y-%m-%d')
         app.config['TESTING'] = True
         app.config['DEBUG'] = False
-        self.app_context = app.app_context()
-        self.app_context.push()
         self.app = app.test_client()
         self.base_url_calculate = "/calculate/"
         self.base_url = "/add/"
