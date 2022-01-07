@@ -11,17 +11,19 @@
 from flask import Flask
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField
+from wtforms.validators import InputRequired, Email, NumberRange
 
 app = Flask(__name__)
 
 
+
 class RegistrationForm(FlaskForm):
-    email = StringField()
-    phone = IntegerField()
-    name = StringField()
-    address = StringField()
-    index = IntegerField()
-    comment = StringField()
+    email = StringField(validators=[InputRequired(), Email()])
+    phone = IntegerField(validators=[InputRequired(), NumberRange(min=1000000000, max=9999999999)])
+    # name = StringField(validators=[InputRequired()])
+    # address = StringField(validators=[InputRequired()])
+    # index = IntegerField(validators=[InputRequired()])
+    # comment = StringField()
 
 
 @app.route("/registration", methods=["POST"])
