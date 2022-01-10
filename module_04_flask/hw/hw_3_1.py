@@ -13,9 +13,9 @@ Endpoint должен быть по url = /ps и принимать входны
 """
 
 import shlex, subprocess
-
 from typing import Optional
 from flask import Flask, request
+
 
 app = Flask(__name__)
 
