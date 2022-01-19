@@ -35,7 +35,6 @@ def input_and_check_password():
             return True
     except ValueError as ex:
         logger.exception("Вы ввели некорректный символ ", exc_info=ex)
-
     return False
 
 
