@@ -1,5 +1,6 @@
 import contextlib
 import os
+import re
 import shlex, subprocess
 
 from flask import Flask, request
@@ -11,6 +12,7 @@ class RunApp:
         self.debug = debug
         self.port = port
         self.app = app
+
 
     # TODO запускаю приложение с параметрами debug=True, port=5000
     def __enter__(self):
@@ -30,8 +32,9 @@ class KillsPid:
     # TODO тут просто убиваю процессы и запускаю новый. В self.stdout три элемента
     #  два PID и один такое: ''   - как раз причина ошибки .
     def __enter__(self):
-        _ = [os.kill(int(pid), 9) for pid in self.stdout.split('\n')]
-        subprocess.run(["python", "task_3.py"])
+        y = re.findall("[\d+]{5}", str(self.stdout))
+        _ = [os.kill(int(pid), 9) for pid in y]
+        # subprocess.run(["python", "task_3.py"])
         return _
 
     # TODO тут та же ситуация  не понимаю почему исключение не заходит в метод __exit__
@@ -40,7 +43,7 @@ class KillsPid:
         return True
 
 
-# @contextlib.contextmanager
+# @contextlib.contextmanager'
 # def kills_pid(stdout):
 #    try:
 #         # _ = [os.kill(int(pid), 9) for pid in stdout.split('\n')]
@@ -50,13 +53,15 @@ class KillsPid:
 #    finally:
 #        subprocess.run(["python", "task_3.py"])
 
+app = Flask(__name__)
+
+
+@app.route("/host/")
+def get_uptime():
+    return f"Current host is:{request.host} "
+
 
 if __name__ == '__main__':
-    app = Flask(__name__)
-
-    @app.route("/host/")
-    def get_uptime():
-        return f"Current host is:{request.host} "
 
     port = 5000
 
@@ -68,7 +73,8 @@ if __name__ == '__main__':
         stdout = result.stdout.decode()
 
         with KillsPid(stdout=stdout):
-            subprocess.run(["python", "task_3.py"])
+            pass
+            # subprocess.run(["python", "task_3.py"])
 
         # with kills_pid(stdout=stdout):
         #     subprocess.run(["python", "task_3.py"])

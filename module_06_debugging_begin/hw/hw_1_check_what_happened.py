@@ -40,7 +40,8 @@ def input_and_check_password():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO, filename="stderr.log",
+                        format='%(levelname)s --- %(name)s - %(asctime)s %(message)s', datefmt='%I:%M:%S', filemode='w')
     logger.info("Вы пытаетесь аутентифицироваться в Skillbox")
     count_number: int = 3
     logger.info(f"У вас есть {count_number} попыток")
@@ -52,3 +53,5 @@ if __name__ == "__main__":
 
     logger.error("Пользователь трижды ввёл не правильный пароль!")
     exit(1)
+
+
