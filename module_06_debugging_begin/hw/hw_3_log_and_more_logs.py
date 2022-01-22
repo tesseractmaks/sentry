@@ -18,6 +18,22 @@ def log(level: str, message: str) -> None:
 Как это сделать? Возможно метод json.dumps поможет вам?
 """
 
+import json
+import datetime
+
 
 def log(level: str, message: str) -> None:
-    pass
+    time = datetime.datetime.now()
+    logger = json.dumps(
+        {
+            "time": datetime.datetime.strftime(time, "%Y:%m:%d %H:%M:%S"),
+            "level": level,
+            "message": message
+        },
+        indent=4
+    )
+    print(logger)
+
+
+for test in range(10):
+    log(f"{test}", f"{test}")

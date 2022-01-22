@@ -7,7 +7,7 @@ from hw.hw_1_2 import app
 class TestRegistrationForm(unittest.TestCase):
 
     def create_app(self):
-        app.config.from_object('config.TestConfiguration')
+        app.config.from_object('logging.ini.TestConfiguration')
         return app
 
     def setUp(self):

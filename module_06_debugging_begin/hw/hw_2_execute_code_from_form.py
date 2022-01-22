@@ -35,14 +35,14 @@ def run_python_code_in_subprocess(code: str, timeout: int) -> str:
 
     command = shlex.split(command)
     process = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
 
     outs, errs = process.communicate(timeout=timeout)
     if errs:
-        logger.exception("Ошибка stderr", exc_info=errs.decode())
+        logger.exception("Ошибка stderr", exc_info=True)
     logger.debug(f"Stdout is valid: {outs.decode()}")
     return outs.decode()
 
@@ -54,7 +54,7 @@ def run_code():
         code = form.code.data
         timeout = form.timeout.data
         stdout = run_python_code_in_subprocess(code=code, timeout=timeout)
-        logger.debug(f"Form is valid {code}, {timeout}")
+        logger.info(f"Form is valid {code}, {timeout}")
         if not stdout:
             logger.error(f"Stdout is not a code {TypeError.__name__} ")
         return f"Stdout: {stdout}"
@@ -69,9 +69,8 @@ def error_handler(exc):
 
 if __name__ == "__main__":
     logger.debug("Start server!")
-    logging.basicConfig(level=logging.INFO, filename="exec.log",
+    logging.basicConfig(level=logging.INFO, filename='exec.log',
                         format='%(levelname)s --- %(name)s - %(asctime)s %(message)s',
-                        datefmt='%I:%M:%S', filemode="w")
+                        datefmt='%I:%M:%S', filemode="a")
     app.config["WTF_CSRF_ENABLED"] = False
     app.run(debug=True)
-
