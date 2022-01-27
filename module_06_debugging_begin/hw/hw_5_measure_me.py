@@ -77,6 +77,7 @@ def get_average_time_run():
     time_object_end = datetime.datetime.strptime(time_end.strip(), "%Y-%m-%d %H:%M:%S,%f")
     average_time_run = (time_object_end - time_object_start).seconds // 2
     print(f"Cреднее время выполнения функции measure_me: {average_time_run} секунд.")
+    os.remove("./logs_hw_5.log")
 
 
 if __name__ == "__main__":
@@ -90,4 +91,3 @@ if __name__ == "__main__":
         data_line = get_data_line(10 ** 3)
         measure_me(data_line)
     get_average_time_run()
-    os.remove("./logs_hw_5.log")
