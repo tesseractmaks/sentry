@@ -13,8 +13,12 @@
 Запустите эту программу, соберите логи и посчитайте
 среднее время выполнения функции measure_me.
 """
+import datetime
 import logging
+import os
 import random
+import re
+
 from typing import List
 
 logger = logging.getLogger(__name__)
@@ -60,14 +64,30 @@ def measure_me(nums: List[int]) -> List[List[int]]:
                     logger.debug(f"Decrement right (left, right) = {left, right}")
 
                     right -= 1
-
     logger.debug("Leave measure_me")
-
     return results
 
 
+def get_average_time_run():
+    with open("logs_hw_5.log", encoding="utf-8") as file:
+        split_file = file.read().split("\n")
+    time_start = re.split("[A-Za-z]", split_file[0])[0]
+    time_end = re.split("[A-Za-z]", split_file[-2])[0]
+    time_object_start = datetime.datetime.strptime(time_start.strip(), "%Y-%m-%d %H:%M:%S,%f")
+    time_object_end = datetime.datetime.strptime(time_end.strip(), "%Y-%m-%d %H:%M:%S,%f")
+    average_time_run = (time_object_end - time_object_start).seconds // 2
+    print(f"Cреднее время выполнения функции measure_me: {average_time_run} секунд.")
+
+
 if __name__ == "__main__":
-    logging.basicConfig(level="DEBUG")
+    logging.basicConfig(
+        level="DEBUG",
+        filename="logs_hw_5.log",
+        format="%(asctime)s %(message)s",
+        filemode="a",
+    )
     for it in range(15):
         data_line = get_data_line(10 ** 3)
         measure_me(data_line)
+    get_average_time_run()
+    os.remove("./logs_hw_5.log")
