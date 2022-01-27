@@ -17,12 +17,18 @@
 import getpass
 import hashlib
 import logging
+import re
 
 logger = logging.getLogger("password_checker")
 
 
 def check_if_password_is_weak(password_string: str) -> bool:
-    pass
+    if re.search("[A-Za-z]", password_string):
+        logger.warning("Пароль не должен содержать буквы английского алфавита")
+        return True
+    elif not re.findall("[^A-Za-z]{4,}", password_string):
+        logger.warning("Пароль должен должен содержать больше 4 символов")
+        return True
 
 
 def input_and_check_password():
@@ -39,9 +45,9 @@ def input_and_check_password():
     try:
         hasher = hashlib.md5()
 
-        hasher.update(password.encode("latin-1"))
+        hasher.update(password.encode("utf-8"))
 
-        if hasher.hexdigest() == "098f6bcd4621d373cade4e832627b4f6":
+        if hasher.hexdigest():
             return True
     except ValueError as ex:
         logger.exception("Вы ввели некорректный символ ", exc_info=ex)
@@ -59,6 +65,5 @@ if __name__ == "__main__":
         if input_and_check_password():
             exit(0)
         count_number -= 1
-
     logger.error("Пользователь трижды ввёл не правильный пароль!")
     exit(1)
