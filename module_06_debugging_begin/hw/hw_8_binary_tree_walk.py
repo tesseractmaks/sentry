@@ -17,7 +17,9 @@ def restore_tree(path_to_log_file: str) -> BinaryTreeNode:
 """
 import itertools
 import logging
+import os
 import random
+import re
 from collections import deque
 from dataclasses import dataclass
 from typing import Optional
@@ -80,5 +82,28 @@ if __name__ == "__main__":
     )
 
     root = get_tree(7)
-
     walk(root)
+
+
+# TODO Влад, я хз что с этим делать "Теория графов". Я не иду в ML. Мой путь Web!
+def restore_tree(path_to_log_file: str) -> BinaryTreeNode:
+    with open(path_to_log_file, 'r') as fin:
+        for line in fin:
+            try:
+                if line.split()[1] == "right":
+                    right_node = re.findall("[\d+]{6}", line)[1]
+                    print("Правая ветка", right_node)
+                if line.split()[1] == "left":
+                    left_node = re.findall("[\d+]{6}", line)[0]
+                    print("Левая ветка", left_node)
+                if line.split()[0] == "INFO:Visiting":
+                    node = re.search("[\d+]{6}", line).group()
+                    print("Корень", node)
+            except IndexError as exc:
+                print(exc)
+            except AttributeError as exc:
+                print(exc)
+
+
+path_to_log_file = os.path.abspath('hw_8_walk_log_4.txt')
+restore_tree(path_to_log_file)
