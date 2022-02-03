@@ -39,11 +39,4 @@ if __name__ == '__main__':
     logger_debug.setLevel("DEBUG")
     logger_error.setLevel("ERROR")
 
-
-
-    # logging.basicConfig(
-    #     level=logging.DEBUG, filename='logs.log',
-    #     format='%(levelname)s --- %(name)s - %(asctime)s %(message)s',
-    #     filemode="w"
-    # )
     calc(sys.argv[1:])
