@@ -1,12 +1,16 @@
 import logging.config
 import sys
+import logging_tree
 
-from mod_logger import dict_config
+from logging_config import dict_config, ContextFilter
+
 from utils import string_to_operator
+
+logging.config.dictConfig(dict_config)
 
 
 def calc(args):
-    logger_debug.debug(f"Arguments: {args}")
+    logger_info.info(f"Arguments: {args}")
     print("Arguments: ", args)
 
     num_1 = args[0]
@@ -26,17 +30,20 @@ def calc(args):
     operator_func = string_to_operator(operator)
 
     result = operator_func(num_1, num_2)
-    logger_debug.debug(f"Result:  {result}")
+    logger_info.info(f"Result:  {result}")
     print("Result: ", result)
     print(f"{num_1} {operator} {num_2} = {result}")
 
 
 if __name__ == '__main__':
-    logging.config.dictConfig(dict_config)
-
-    logger_debug = logging.getLogger("module_logger_debug")
+    logger_info = logging.getLogger("module_logger_info")
     logger_error = logging.getLogger("module_logger_error")
-    logger_debug.setLevel("DEBUG")
+    logger_info.setLevel("INFO")
     logger_error.setLevel("ERROR")
+    filt = ContextFilter()
+    logger_info.addFilter(filt)
+    logger_error.addFilter(filt)
 
     calc(sys.argv[1:])
+    # logging_tree.printout()
+
