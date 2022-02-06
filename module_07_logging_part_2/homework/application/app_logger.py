@@ -1,32 +1,18 @@
-import shlex, subprocess
-from typing import Optional
-from flask import Flask, request
-from flask_wtf import FlaskForm
-from wtforms import IntegerField
-from wtforms.validators import InputRequired
-
-# from probe import published
+import sys
+from flask import Flask
+from app import calc
 
 app = Flask(__name__)
 
 
-class WorkerForm(FlaskForm):
-   x = IntegerField(validators=[InputRequired()])
-
-
 @app.route("/logs", methods=["POST"])
-def publish():
-    form = WorkerForm()
-    x = form.x.data
-    res = published(x)
-    # print(res)
-    return res
+def published():
+    # TODO здесь вызываю основной код из которого должен получить строки логгеров
+    stdout = calc(sys.argv[1:])
+    return f'<pre> {stdout} </pre>'
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.config["WTF_CSRF_ENABLED"] = False
-
     app.run(debug=True)
-    # published()
-
 
