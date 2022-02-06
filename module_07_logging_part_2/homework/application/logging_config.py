@@ -13,7 +13,6 @@ class ContextFilter(logging.Filter):
             return True
 
 
-
 # class LoggHandler(logging.Handler):
 #     def __init__(self, file_name, mode="a"):
 #         super().__init__()

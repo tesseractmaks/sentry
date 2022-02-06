@@ -41,3 +41,7 @@ def string_to_operator(value: str) -> Callable[[Numeric, Numeric], Numeric]:
         raise ValueError("wrong operator value")
     logger_info.info(f"finish - {__name__}")
     return OPERATORS[value]
+
+
+
+
