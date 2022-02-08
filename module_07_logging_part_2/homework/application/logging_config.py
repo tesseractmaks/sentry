@@ -24,12 +24,16 @@ class CustomFileHandler(logging.Handler):
 
     def emit(self, record: logging.LogRecord) -> None:
         message = self.format(record)
+        assert message, "Нет сообщения лога"
         data = f'{message}'
         server_url = "http://127.0.0.1:5000/logs"
         template = f'curl -H "Content-Type: application/json" -X POST -d \"{data}\" {server_url}'
         curl_cmd = shlex.split(template)
+        assert curl_cmd, "Не объект shlex"
         response = subprocess.Popen(curl_cmd, stdout=subprocess.PIPE, universal_newlines=True)
-        response.stdout.read()
+        assert response, "Нет ответа stdout"
+
+        assert response.stdout.read(), "Нет данных"
         with open(self.file_name, mode=self.mode) as file:
             file.write(message + '\n')
 
@@ -78,6 +82,3 @@ dict_config = {
         }
     },
 }
-
-
-
