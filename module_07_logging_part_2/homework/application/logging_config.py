@@ -1,4 +1,6 @@
 import logging
+import shlex
+import subprocess
 import sys
 import string
 
@@ -13,17 +15,23 @@ class ContextFilter(logging.Filter):
             return True
 
 
-# class LoggHandler(logging.Handler):
-#     def __init__(self, file_name, mode="a"):
-#         super().__init__()
-#         self.file_name = file_name
-#         self.mode = mode
-#
-#     def emit(self, record):
-#         message = self.format(record)
-#         with open(self.file_name, mode=self.mode) as file:
-#             file.write(message + "\n")
+class CustomFileHandler(logging.Handler):
 
+    def __init__(self, file_name, mode='a'):
+        super().__init__()
+        self.file_name = file_name
+        self.mode = mode
+
+    def emit(self, record: logging.LogRecord) -> None:
+        message = self.format(record)
+        data = f'{message}'
+        server_url = "http://127.0.0.1:5000/logs"
+        template = f'curl -H "Content-Type: application/json" -X POST -d \"{data}\" {server_url}'
+        curl_cmd = shlex.split(template)
+        response = subprocess.Popen(curl_cmd, stdout=subprocess.PIPE, universal_newlines=True)
+        response.stdout.read()
+        with open(self.file_name, mode=self.mode) as file:
+            file.write(message + '\n')
 
 
 dict_config = {
@@ -42,26 +50,21 @@ dict_config = {
             "stream": sys.stderr,
         },
         "file": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "when": "h",
-            "interval": 10,
-            "backupCount": 5,
+            "()": CustomFileHandler,
             "level": "INFO",
             "formatter": "base",
-            "filename": "logfile_info.log",
-            # "mode": "a"
+            "file_name": "logfile.log",
+            "mode": "a"
         },
         "file_err": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "when": "h",
-            "interval": 10,
-            "backupCount": 5,
+            "()": CustomFileHandler,
             "level": "ERROR",
             "formatter": "base",
-            "filename": "logfile_error.log",
-            # "mode": "a"
-        }
+            "file_name": "logfile_error.log",
+            "mode": "a"
+        },
     },
+
     "loggers": {
         "module_logger_info": {
             "level": "INFO",
@@ -75,3 +78,6 @@ dict_config = {
         }
     },
 }
+
+
+
