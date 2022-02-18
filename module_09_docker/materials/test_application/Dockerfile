@@ -11,3 +11,5 @@ COPY app.py /app/
 WORKDIR /app
 
 ENTRYPOINT ["python", "app.py"]
+
+
