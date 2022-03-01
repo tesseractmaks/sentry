@@ -3,7 +3,7 @@
 def find_insert_position(A, x):
     for i, v in enumerate(A):
         if A[i - 1] < x < A[i + 1]:
-            print(f'Позиция: {i+1}')
+            print(f'Позиция в индексе: {i+1}')
             return i+1
 
 
