@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 class Philosopher(threading.Thread):
     running = True
+
     def __init__(self, left_fork: threading.Lock, right_fork: threading.Lock):
         super().__init__()
         self.left_fork = left_fork
