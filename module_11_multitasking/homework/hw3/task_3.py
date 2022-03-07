@@ -5,7 +5,6 @@ import threading
 import time
 
 from requests import HTTPError
-from threading import Lock
 from itertools import count
 
 
