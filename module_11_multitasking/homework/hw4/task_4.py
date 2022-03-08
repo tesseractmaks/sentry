@@ -39,7 +39,6 @@ class Seller(threading.Thread):
                         with Lock():
                             TOTAL_TICKETS = self.boss_add_tiskets(TOTAL_TICKETS)
                 # -----
-
                 self.tickets_sold += 1
                 TOTAL_TICKETS -= 1
                 logger.info(f'{self.getName()} sold one;  {TOTAL_TICKETS} left')
@@ -48,7 +47,6 @@ class Seller(threading.Thread):
                 if TOTAL_NUMBER_OF_SEATS == self.tickets_sold:
                     is_running = False
                 # -----
-
         logger.info(f'Seller {self.getName()} sold {self.tickets_sold} tickets')
 
     @staticmethod
