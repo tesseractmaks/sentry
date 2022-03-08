@@ -5,6 +5,7 @@ import threading
 import time
 
 from threading import Lock
+
 TOTAL_TICKETS = 10
 TOTAL_NUMBER_OF_SEATS = 100
 
@@ -25,13 +26,12 @@ class Seller(threading.Thread):
         global TOTAL_NUMBER_OF_SEATS
         is_running = True
         while is_running:
-
             self.random_sleep()
             with self.sem:
 
                 # TODO добавленный блок кода:
-                type = "\t" * 10
-                logger.info(f'{type}sold total tickets----{self.tickets_sold}')
+                indent = "\t" * 10
+                logger.info(f'{indent}sold total tickets----{self.tickets_sold}')
                 if TOTAL_TICKETS == 4:
                     if TOTAL_NUMBER_OF_SEATS - self.tickets_sold == TOTAL_TICKETS:
                         continue
@@ -73,5 +73,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
