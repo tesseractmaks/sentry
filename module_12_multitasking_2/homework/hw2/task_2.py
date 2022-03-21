@@ -27,7 +27,7 @@ def process_count():
 
 
 def total_memory_usage(root_memory):
-    """Получает Cуммарное потребление памяти древа процессов"""
+    """Получает Cуммарное потребление  памяти древа процессов"""
 
     memory_sum = sum(map(int, root_memory))
     print(f'Cуммарное потребление памяти древа процессов: {(memory_sum / 1024 / 1024).__round__(2)} гигабайт')
