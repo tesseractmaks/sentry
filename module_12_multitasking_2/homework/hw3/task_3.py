@@ -1,7 +1,10 @@
 import threading
 import time
 
+from multiprocessing.pool import ThreadPool
+
 sem = threading.Semaphore()
+
 
 def fun1():
     while True:
@@ -10,6 +13,7 @@ def fun1():
         sem.release()
         time.sleep(0.25)
 
+
 def fun2():
     while True:
         sem.acquire()
@@ -17,7 +21,12 @@ def fun2():
         sem.release()
         time.sleep(0.25)
 
-t1 = threading.Thread(target = fun1)
-t1.start()
-t2 = threading.Thread(target = fun2)
-t2.start()
+
+if __name__ == '__main__':
+
+    with ThreadPool(processes=3) as pool:
+        thread_1 = pool.apply_async(fun1)
+        thread_2 = pool.apply_async(fun2)
+
+        thread_1.get()
+        thread_2.get()
