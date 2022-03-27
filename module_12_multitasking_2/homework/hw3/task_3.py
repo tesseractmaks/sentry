@@ -23,10 +23,20 @@ def fun2():
 
 
 if __name__ == '__main__':
+    try:
+        with ThreadPool(processes=3) as pool:
+            thread_1 = pool.apply_async(fun1)
+            thread_2 = pool.apply_async(fun2)
+            thread_1.get()
+            thread_2.get()
+    except KeyboardInterrupt:
+        pass
+    
 
-    with ThreadPool(processes=3) as pool:
-        thread_1 = pool.apply_async(fun1)
-        thread_2 = pool.apply_async(fun2)
 
-        thread_1.get()
-        thread_2.get()
+
+
+
+        
+
+
