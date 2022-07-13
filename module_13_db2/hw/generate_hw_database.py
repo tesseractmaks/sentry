@@ -313,11 +313,11 @@ def generate_hw_6_db(c: sqlite3.Connection) -> None:
 
         full_name = _get_random_full_name()
 
+
         try:
             cursor.execute(insert_new_employee, (full_name, salary))
         except sqlite3.IntegrityError:
             continue  # in case of UNIQUE constraint violation
-
         if (i + 1) % 100 == 0:
             c.commit()
 
