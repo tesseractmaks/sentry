@@ -9,14 +9,21 @@
     пожалуйста удалите записи об этих штрафах из таблицы `table_fees`
 """
 import sqlite3
+import csv
+
+delete_request = """
+DELETE FROM table_fees WHERE truck_number = ? AND timestamp = ?
+"""
 
 
 def delete_wrong_fees(c: sqlite3.Cursor, wrong_fees_file: str) -> None:
-    ...
+    with open(wrong_fees_file, mode='r', encoding='utf-8') as file:
+        reader = csv.DictReader(file, delimiter=",")
+        for line in reader:
+            c.execute(delete_request, (line['car_number'], line['timestamp']))
 
 
 if __name__ == "__main__":
     with sqlite3.connect("hw.db") as conn:
         cursor = conn.cursor()
-
         delete_wrong_fees(cursor, "wrong_fees.csv")
