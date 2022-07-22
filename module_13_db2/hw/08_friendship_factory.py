@@ -19,8 +19,28 @@
 Пожалуйста помогите изменить расписание смен с учётом личных предпочтений коллектива
     (или докажите, что то, чего они хотят - не возможно).
 """
+
 import sqlite3
 
 
 def update_work_schedule(c: sqlite3.Cursor) -> None:
-    ...
+    for i in sports:
+        c.execute(sql_request, (i,))
+        number_of_luckers, *_ = c.fetchone()
+        print(f"Ссотрудников по виду спорта: {i} - ", number_of_luckers)
+    print(
+        "\nТо, чего они хотят - не возможно из-за того, что на смену в каждый день недели заходит 366 чел.,"
+        " а по каждому виду спорта  всего не более 60 чел. Нужно чтобы по каждому виду спорта было 366 чел."
+        " \n\nВторой ответ: По видам спорта не равномерное распределение и в некоторых сменах не будет доставать"
+        " сотрудников.\n\nВозможно я не доконца понял задание в части смен."
+    )
+
+
+if __name__ == "__main__":
+    sql_request = """
+        SELECT COUNT(*) FROM table_friendship_employees WHERE preferable_sport=?
+    """
+    sports = ["футбол", "хоккей", "шахматы", "SUP сёрфинг", "бокс", "Dota2", "шах-бокс"]
+    with sqlite3.connect("hw.db") as conn:
+        cursor = conn.cursor()
+        update_work_schedule(cursor)

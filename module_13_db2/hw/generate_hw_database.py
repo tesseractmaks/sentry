@@ -442,9 +442,9 @@ def generate_hw_8_db(c: sqlite3.Connection) -> None:
 
 if __name__ == "__main__":
     with sqlite3.connect("hw.db") as conn:
-        generate_hw_2_db(conn)
-        generate_hw_3_db(conn)
-        generate_hw_5_db(conn)
-        generate_hw_6_db(conn)
-        generate_hw_7_db(conn)
+        # generate_hw_2_db(conn)
+        # generate_hw_3_db(conn)
+        # generate_hw_5_db(conn)
+        # generate_hw_6_db(conn)
+        # generate_hw_7_db(conn)
         generate_hw_8_db(conn)
