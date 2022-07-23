@@ -1,7 +1,6 @@
-import sqlite3
 from typing import List, Dict
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 
 from models import init_db, get_all_books, DATA
 
@@ -42,22 +41,6 @@ def all_books():
 
 @app.route('/books/form')
 def get_books_form():
-    return render_template('add_book.html')
-
-
-@app.route('/books/add', methods=["POST"])
-def get_books():
-    insert_data = """
-        INSERT INTO 'table_books' (title, author) VALUES (?, ?);
-    """
-
-    book_title = request.form.get('field1')
-    author_name = request.form.get('field2')
-
-    with sqlite3.connect("table_books.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute(insert_data, (book_title, author_name, ))
-
     return render_template('add_book.html')
 
 
