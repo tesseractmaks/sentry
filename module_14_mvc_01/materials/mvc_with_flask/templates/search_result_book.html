@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h1>Get book of the DB!</h1>
+<p><h1>Author: {{ data.author }}</h1></p>
+
+
+{% if data %}
+<table class="customTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                {{ data.id }}
+            </td>
+            <td>
+                {{ data.title }}
+            </td>
+            <td>
+                {{ data.author }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% else %}
+<h2> Sorry, no books in DB.</h2>
+{% endif %}
+{% endblock %}

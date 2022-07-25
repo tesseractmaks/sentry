@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Add book of the DB!<p>Success!</p></h1>
+
+{% if book %}
+<table class="customTable">
+
+    <thead>
+    <tr>
+        <th>Title</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                {{ book }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% else %}
+<h2> Sorry, no book not add in DB.</h2>
+{% endif %}
+{% endblock %}

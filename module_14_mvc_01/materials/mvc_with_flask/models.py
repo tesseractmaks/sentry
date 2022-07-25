@@ -3,18 +3,18 @@ from typing import List
 
 
 DATA = [
-    {'id': 0, 'title': 'A Byte of Python', 'author': 'Swaroop C. H.'},
-    {'id': 1, 'title': 'Moby-Dick; or, The Whale', 'author': 'Herman Melville'},
-    {'id': 3, 'title': 'War and Peace', 'author': 'Leo Tolstoy'},
+    {'id': 0, 'title': 'A Byte of Python', 'author': 'Swaroop C. H.', 'count_views': 0},
+    {'id': 1, 'title': 'Moby-Dick; or, The Whale', 'author': 'Herman Melville', 'count_views': 0},
+    {'id': 3, 'title': 'War and Peace', 'author': 'Leo Tolstoy', 'count_views': 0},
 ]
 
 
 class Book:
-
-    def __init__(self, id: int, title: str, author: str):
+    def __init__(self, id: int, title: str, author: str, count_views: int):
         self.id = id
         self.title = title
         self.author = author
+        self.count_views = count_views
 
     def __getitem__(self, item):
         return getattr(self, item)
@@ -32,12 +32,11 @@ def init_db(initial_records: List[dict]):
         if not exists:
             cursor.executescript(
                 'CREATE TABLE `table_books`'
-                '(id INTEGER PRIMARY KEY AUTOINCREMENT, title, author)'
+                '(id INTEGER PRIMARY KEY AUTOINCREMENT, title, author, count_views INTEGER DEFAULT 0)'
             )
             cursor.executemany(
-                'INSERT INTO `table_books` '
-                '(title, author) VALUES (?, ?)',
-                [(item['title'], item['author']) for item in initial_records]
+                """INSERT INTO table_books (title, author, count_views) VALUES (?, ?, ?);""",
+                [(item['title'], item['author'], item['count_views']) for item in initial_records]
             )
 
 

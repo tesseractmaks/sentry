@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h3>Authors:</h3>
+    {% for book in books  %}
+    <ul>
+        <li>{{ book.author }}</li>
+    </ul>
+    {% endfor %}
 <div class="form-style-10">
-<h1>Add new book!<span>Feel the fields and and new books to the DB!</span></h1>
-<form action="/books/add_done" method="post">
-    <div class="section"><span>1</span>Book title</div>
-    <div class="inner-wrap">
-        {{ form.book_title.label }}
-        {{ form.book_title }}
-    </div>
+<h1>Get new book!<span>Get new books of the DB!</span></h1>
+
+
+<form action="/books/author" method="post">
     <div class="section"><span>2</span>Author full name</div>
     <div class="inner-wrap">
         {{ form.author_name.label }}
         {{ form.author_name }}
     </div>
-
     <div class="button-section">
      <input type="submit" name="Add new book" />
     </div>

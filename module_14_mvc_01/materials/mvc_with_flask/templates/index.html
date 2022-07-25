@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +12,11 @@
 
 <h1>Books:</h1>
 
+<h3><a href="{{ url_for('get_books') }}">Find a book by author</a></h3>
+<h3><a href="{{ url_for('add_books') }}">Add new book</a></h3>
+
+
+
 {% if books %}
 <table class="customTable">
     <thead>
@@ -18,6 +24,7 @@
         <th>ID</th>
         <th>Title</th>
         <th>Author</th>
+        <th>Views</th>
     </tr>
     </thead>
     <tbody>
@@ -32,7 +39,11 @@
             <td>
                 {{ book.author }}
             </td>
+            <td>
+                {{ book.count_views }}
+            </td>
         </tr>
+
         {% endfor %}
     </tbody>
 </table>
