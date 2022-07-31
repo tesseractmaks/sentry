@@ -61,7 +61,39 @@
 					],
 					"path": [
 						"add-room"
-					]
+					],
+					"query": [
+								{
+									"key": "floor",
+									"value": "1"
+								},
+								{
+									"key": "beds",
+									"value": "1"
+								},
+								{
+									"key": "guestNum",
+									"value": "2"
+								},
+								{
+									"key": "price",
+									"value": "1000"
+								}
+							],
+					"properties": {
+                                "floor": {
+                                    "type": "integer"
+                                },
+								 "beds": {
+                                    "type": "integer"
+                                },
+                                "guestNum": {
+                                    "type": "integer"
+                                },
+                                "price": {
+                                    "type": "integer"
+                                }
+                            }
 				}
 			},
 			"response": []
@@ -144,9 +176,7 @@
 				"method": "GET",
 				"header": [
 					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+						"type": "object"
 					}
 				],
 				"url": {
@@ -170,7 +200,24 @@
 							"key": "guestsNum",
 							"value": "2"
 						}
-					]
+					],
+					"properties": {
+                                "roomId": {
+                                    "type": "integer"
+                                },
+                                "floor": {
+                                    "type": "integer"
+                                },
+                                "guesttNum": {
+                                    "type": "integer"
+                                },
+                                "beds": {
+                                    "type": "integer"
+                                },
+                                "price": {
+                                    "type": "integer"
+                                }
+                            }
 				}
 			},
 			"response": []
@@ -248,7 +295,52 @@
 					],
 					"path": [
 						"booking"
-					]
+					],
+					"query": [
+						{
+							"key": "bookingDates",
+							"value":
+						[
+							{
+								"key":"checkIn",
+								"value": "{{checkInDate}}"
+							},
+							{
+								"key": "checkOut",
+								"value": "{{checkOutDate}}"
+							}
+						]
+						},
+						{
+							"key":"firstName",
+							"value": "John"
+						},
+						{
+							"key": "lastName",
+							"value": "Smith"
+						},
+						{
+							"key": "roomId",
+							"value": "{{roomId}}"
+						}
+					],
+					"properties": {
+                                "roomId": {
+                                    "type": "integer"
+                                },
+                                "lastName": {
+                                    "type": "string"
+                                },
+								 "firstName": {
+                                    "type": "string"
+                                },
+                                "checkOut": {
+                                    "type": "integer"
+                                },
+                                "checkIn": {
+                                    "type": "integer"
+                                }
+                            }
 				}
 			},
 			"response": []
@@ -286,6 +378,15 @@
 		{
 			"key": "checkOutDate",
 			"value": "20210311"
+		},
+		{
+			"key": "roomId",
+			"value": "2"
+		},
+		{
+			"key": "loginToken",
+			"value": "556776"
 		}
+
 	]
 }
