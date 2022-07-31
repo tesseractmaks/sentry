@@ -2,7 +2,7 @@ import sqlite3
 
 from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
-from wtforms import  StringField
+from wtforms import StringField
 from wtforms.validators import InputRequired
 
 from models import init_db, get_all_books, DATA
