@@ -56,7 +56,7 @@ CREATE TABLE 'movie_cast' (
 
 
 def create_tables():
-    with sqlite3.connect("surrogate.db") as conn:
+    with sqlite3.connect("task_1_surrogate.db") as conn:
         cursor = conn.cursor()
 
         cursor.executescript(ENABLE_FOREIGN_KEY)
