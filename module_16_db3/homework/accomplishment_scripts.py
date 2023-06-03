@@ -2,7 +2,7 @@ import sqlite3
 
 
 if __name__ == "__main__":
-    # for i in range(1, 5):
+    # for i in range(3, 8):
 
     with open('2_7.sql', 'r') as sql_file:
         sql_script: str = sql_file.read()
