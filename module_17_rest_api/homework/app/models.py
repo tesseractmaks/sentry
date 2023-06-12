@@ -1,132 +1,138 @@
-import sqlite3
 from dataclasses import dataclass
-from typing import Optional, Union, List, Dict
+from typing import Optional
+import sqlite3
 
-DATA = [
-    {'id': 0, 'title': 'A Byte of Python', 'author': 'Swaroop C. H.'},
-    {'id': 1, 'title': 'Moby-Dick; or, The Whale', 'author': 'Herman Melville'},
-    {'id': 3, 'title': 'War and Peace', 'author': 'Leo Tolstoy'},
-]
-
-DATABASE_NAME = 'table_books.db'
-BOOKS_TABLE_NAME = 'books'
+BOOKS_TABLE_NAME = "books"
+AUTHORS_TABLE_NAME = "author"
+DATABASE_NAME = "books.db"
 
 
 @dataclass
 class Book:
-    title: str
-    author: str
-    id: Optional[int] = None
+    book_name: str
+    author: Optional[int]
+    book_id: Optional[int]
 
-    def __getitem__(self, item: str) -> Union[int, str]:
+    def __getitem__(self, item):
         return getattr(self, item)
 
 
-def init_db(initial_records: List[Dict]) -> None:
+@dataclass
+class Author:
+    first_name: str
+    last_name: str
+    middle_name: str
+    author_id: Optional[int]
+
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+
+def _get_book_obj_from_row(row):
+    return Book(book_id=row[0], author=row[1], book_name=row[2])
+
+
+def _get_author_obj_from_row(row):
+    return Author(author_id=row[0], first_name=row[1], last_name=row[2], middle_name=row[3])
+
+
+def get_all_obj(TABLE_NAME):
     with sqlite3.connect(DATABASE_NAME) as conn:
-        cursor = conn.cursor()
+        cursor: sqlite3.Cursor = conn.cursor()
         cursor.execute(
-            f"""
-            SELECT name FROM sqlite_master
-            WHERE type='table' AND name='{BOOKS_TABLE_NAME}';
-            """
+            f"SELECT * FROM `{TABLE_NAME}`"
         )
-        exists = cursor.fetchone()
-        if not exists:
-            cursor.executescript(
-                f"""
-                CREATE TABLE `{BOOKS_TABLE_NAME}`(
-                    id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                    title TEXT,
-                    author TEXT
-                );
-                """
-            )
-            cursor.executemany(
-                f"""
-                INSERT INTO `{BOOKS_TABLE_NAME}`
-                (title, author) VALUES (?, ?)
-                """,
-                [
-                    (item['title'], item['author'])
-                    for item in initial_records
-                ]
-            )
+        all_obj = cursor.fetchall()
+        if TABLE_NAME == "author":
+            return [_get_author_obj_from_row(row) for row in all_obj]
+        return [_get_book_obj_from_row(row) for row in all_obj]
 
 
-def _get_book_obj_from_row(row: tuple) -> Book:
-    return Book(id=row[0], title=row[1], author=row[2])
+def get_obj_by_id(TABLE_NAME, obj_names_column, obj_id: int):
+    with sqlite3.connect(DATABASE_NAME) as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        names_column = None
+        if "book_id" in obj_names_column:
+            names_column = "book_id"
+        if "author_id" in obj_names_column:
+            names_column = "author_id"
+        qry = f"SELECT * FROM `{TABLE_NAME}` WHERE {names_column} = '%s'" % obj_id
+        cursor.execute(qry, )
+        result = cursor.fetchone()
+        if result and names_column == "author_id":
+            return _get_author_obj_from_row(result)
+        if result and names_column == "book_id":
+            return _get_book_obj_from_row(result)
 
 
-def get_all_books() -> list[Book]:
+def add_obj(TABLE_NAME, obj_class):
+    with sqlite3.connect(DATABASE_NAME) as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        qry_table = f"INSERT INTO `{TABLE_NAME}` "
+        names_column = str(tuple(obj_class.keys())[:-1])
+        values_column = tuple(obj_class.values())[:-1]
+        param_values = f"{'?,' * len(values_column)}"[:-1]
+        qry = f"{qry_table}{names_column} VALUES ({param_values})"
+        cursor.execute(qry, values_column)
+        obj_class[str(tuple(obj_class.keys())[-1])] = cursor.lastrowid
+        return obj_class
+
+
+def delete_obj_by_id(TABLE_NAME, obj_names_column, obj_id: int) -> None:
     with sqlite3.connect(DATABASE_NAME) as conn:
         cursor = conn.cursor()
-        cursor.execute(f'SELECT * FROM `{BOOKS_TABLE_NAME}`')
-        all_books = cursor.fetchall()
-        return [_get_book_obj_from_row(row) for row in all_books]
-
-
-def add_book(book: Book) -> Book:
-    with sqlite3.connect(DATABASE_NAME) as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            f"""
-            INSERT INTO `{BOOKS_TABLE_NAME}` 
-            (title, author) VALUES (?, ?)
-            """,
-            (book.title, book.author)
-        )
-        book.id = cursor.lastrowid
-        return book
-
-
-def get_book_by_id(book_id: int) -> Optional[Book]:
-    with sqlite3.connect(DATABASE_NAME) as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            f"""
-            SELECT * FROM `{BOOKS_TABLE_NAME}` WHERE id = ?
-            """,
-            (book_id,)
-        )
-        book = cursor.fetchone()
-        if book:
-            return _get_book_obj_from_row(book)
-
-
-def update_book_by_id(book: Book) -> None:
-    with sqlite3.connect(DATABASE_NAME) as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            f"""
-            UPDATE {BOOKS_TABLE_NAME}
-            SET title = ?, author = ?
-            WHERE id = ?
-            """,
-            (book.title, book.author, book.id)
-        )
+        names_column = None
+        if "book_id" in obj_names_column:
+            names_column = "book_id"
+        if "author_id" in obj_names_column:
+            names_column = "author_id"
+        qry = f"DELETE FROM `{TABLE_NAME}` WHERE {names_column} = '%s'" % obj_id
+        cursor.execute(qry, )
         conn.commit()
 
 
-def delete_book_by_id(book_id: int) -> None:
+def update_obj_by_id(TABLE_NAME, obj_class, obj_id):
     with sqlite3.connect(DATABASE_NAME) as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-            f"""
-            DELETE FROM {BOOKS_TABLE_NAME}
-            WHERE id = ?
-            """,
-            (book_id,)
-        )
+        cursor: sqlite3.Cursor = conn.cursor()
+        names_column = tuple(obj_class.keys())[:-1]
+        values_column = tuple(obj_class.values())[:-1]
+        qry = f"UPDATE `{TABLE_NAME}` SET "
+        for name, value in zip(names_column, values_column):
+            qry += f"{name} = '{value}',"
+        names_column = None
+        if "book_id" in tuple(obj_class.keys()):
+            names_column = "book_id"
+        if "author_id" in tuple(obj_class.keys()):
+            names_column = "author_id"
+        qry = qry[:-1] + f"WHERE {names_column} = {obj_id}"
+        cursor.execute(qry)
         conn.commit()
 
 
-def get_book_by_title(book_title: str) -> Optional[Book]:
+def update_patch_obj_by_id(TABLE_NAME, obj_class, obj_id):
+    with sqlite3.connect(DATABASE_NAME) as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        names_column = tuple(obj_class.keys())
+        values_column = tuple(obj_class.values())
+        qry = f"UPDATE `{TABLE_NAME}` SET "
+        for name, value in zip(names_column, values_column):
+            qry += f"{name} = '{value}',"
+        names_column = None
+        if TABLE_NAME == "books":
+            names_column = "book_id"
+        if TABLE_NAME == "author":
+            names_column = "author_id"
+        qry = qry[:-1] + f"WHERE {names_column} = {obj_id}"
+        cursor.execute(qry)
+        conn.commit()
+
+
+def get_book_by_title(TABLE_NAME, book_title: str) -> Optional[Book]:
     with sqlite3.connect(DATABASE_NAME) as conn:
         cursor = conn.cursor()
         cursor.execute(
             f"""
-            SELECT * FROM `{BOOKS_TABLE_NAME}` WHERE title = ?
+            SELECT * FROM `{TABLE_NAME}` WHERE book_name = ?
             """,
             (book_title,)
         )
