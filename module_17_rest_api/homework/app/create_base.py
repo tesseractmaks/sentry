@@ -37,7 +37,7 @@ book_names = """
 def _get_random_book_names_author_id(book_names):
     book_name = random.choice(book_names)
     author_id = random.randint(1, 10)
-    return book_name + "".join([random.choice(string.ascii_letters) for _ in range(1, 5)]), author_id
+    return book_name.strip() + "".join([random.choice(string.ascii_letters) for _ in range(1, 5)]), author_id
 
 
 def _get_random_fio(last_names, first_names, middle_names):
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     with sqlite3.connect('books.db') as conn:
         cursor: sqlite3.Cursor = conn.cursor()
         cursor.executescript(sql_script)
-        fio = [(_get_random_fio(last_names, first_names, middle_names)) for _ in range(1, 11)]
+        fio = [(_get_random_fio(first_names, last_names, middle_names)) for _ in range(1, 11)]
         book_names = [(_get_random_book_names_author_id(book_names)) for _ in range(1, 35)]
         cursor.executemany(
             "INSERT INTO 'author' (first_name, last_name, middle_name) values (?, ?, ?)",
