@@ -1,6 +1,5 @@
 import time
 from concurrent.futures import ThreadPoolExecutor
-
 import requests
 import logging
 
@@ -44,13 +43,14 @@ def main(qweries=10, sessions=False, threads=False):
     for _ in range(qweries):
         client.get_all_books(sessions=sessions)
     end = time.time()
+    print("qweries - ", qweries)
     print("threads - ", bool(threads))
     print("session - ", bool(sessions))
     print((end - start).__round__(4), 'sec.')
 
 
 if __name__ == '__main__':
-    main(qweries=10, sessions=True, threads=False)
+    main(qweries=1000, sessions=False, threads=True)
 
 
 
