@@ -1,0 +1,96 @@
+{
+  "definitions": {
+    "Book": {
+      "properties": {
+        "author": {
+          "type": "integer"
+        },
+        "book_id": {
+          "readOnly": true,
+          "type": "integer"
+        },
+        "book_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "author",
+        "book_id",
+        "book_name"
+      ],
+      "type": "object"
+    },
+    "BookPatch": {
+      "properties": {
+        "author": {
+          "type": "integer"
+        },
+        "book_id": {
+          "readOnly": true,
+          "type": "integer"
+        },
+        "book_name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "info": {
+    "title": "BooksList",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/books": {
+      "get": {
+        "operationId": "getApiBooks",
+        "responses": {
+          "200": {
+            "description": "Books data",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Book"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "summary": "This is an endpoint for ...",
+        "tags": [
+          "books"
+        ]
+      }
+    },
+    "/api/books/{book_id}": {
+      "get": {
+        "operationId": "getApiBookId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "book_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Books data",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Book"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "summary": "This is an endpoint for ...",
+        "tags": [
+          "books"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0"
+}

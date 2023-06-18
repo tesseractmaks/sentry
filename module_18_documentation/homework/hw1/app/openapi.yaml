@@ -1,0 +1,215 @@
+openapi: "3.0.3"
+info:
+  title: Skillbox App Books
+  description: Nerealnoe
+  version: 0.0.1
+servers:
+  - url: http://127.0.0.1:5000/
+    description: Dev server
+paths:
+  /api/books:
+    get:
+      summary: Get list books
+      tags:
+        - Books
+      operationId: getAllBooks
+      responses:
+        '200':
+          description: Books data
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Book'
+        '400':
+          description: Incorrect input
+        'default':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Nestandartnoe
+    post:
+      tags:
+        - Books
+      summary: Method created object of book
+      description: Creaate a new book
+      operationId: addBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+            examples:
+              book:
+                summary: add new book
+                value: {author: 10, book_name: Vasya3}
+
+        description: Create new book
+        required: true
+      responses:
+        '200':
+          description: Books data
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Book'
+        '400':
+          description: Incorrect input
+        'default':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Nestandartnoe
+  /api/books/{book_id}:
+    parameters:
+        - $ref: '#/components/parameters/book_Id'
+    get:
+      summary: Get list books
+      tags:
+        - Books
+      operationId: getBookById
+      responses:
+        '200':
+          description: Book by ID data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Incorrect input
+        'default':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Nestandartnoe
+    delete:
+      summary: Delete book
+      tags:
+        - Books
+      operationId: deleteBookById
+      responses:
+        '200':
+          description: Delete book by ID
+          content:
+            application/json: {}
+        '400':
+          description: Incorrect input
+        'default':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Nestandartnoe
+    put:
+      tags:
+        - Books
+      summary: Method replace object of book
+      description: Replace a new book
+      operationId: replaceBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+            examples:
+              book:
+                summary: replace book
+                value: {
+                  author: 10,
+                  book_name: Vasya3}
+        description: Replaced book
+        required: true
+      responses:
+        '200':
+          description: Replace book data
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Book'
+        '400':
+          description: Incorrect input
+        'default':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Nestandartnoe
+    patch:
+      tags:
+        - Books
+      summary: Method update object of book
+      description: Update a new book
+      operationId: updateBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+            examples:
+              book:
+                summary: update book
+                value: {
+                  author: 10,
+                  book_name: Vasya3}
+        description: Update book
+        required: false
+      responses:
+        '200':
+          description: Update book data
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Book'
+        '400':
+          description: Incorrect input
+        'default':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Nestandartnoe
+components:
+  schemas:
+    Book:
+      type: object
+      description: good
+      required:
+        - book_id
+        - author
+        - book_name
+      properties:
+        book_id:
+          type: integer
+          format: int64
+          example: 10
+        author:
+          type: integer
+          format: int64
+          example: 10
+        book_name:
+          type: string
+          example: Vasya
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+  parameters:
+    book_Id:
+      name: book_id
+      in: path
+      description: good
+      schema:
+        type: integer
+      required: true
