@@ -44,6 +44,7 @@ paths:
               book:
                 summary: add new book
                 value: {author: 10, book_name: Vasya3}
+
         description: Create new book
         required: true
       responses:

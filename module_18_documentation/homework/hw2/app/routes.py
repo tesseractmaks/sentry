@@ -13,16 +13,15 @@ from models import (
     update_obj_by_id,
     delete_obj_by_id,
     update_patch_obj_by_id,
-
 )
 from schemas import BookSchema, AuthorSchema, BookSchemaPatch, AuthorSchemaPatch
+from werkzeug.serving import WSGIRequestHandler
 
 app = Flask(__name__)
 app.config['SWAGGER'] = {
     'openapi': '3.0.0'
 }
 api = Api(app)
-
 spec = APISpec(
     title="BooksList",
     version="1.0.0",
@@ -139,4 +138,5 @@ swagger = Swagger(app, template=None, template_file="openapi.yaml")
 
 if __name__ == '__main__':
     init_db()
+    WSGIRequestHandler.protocol_version = "HTTP/1.1"
     app.run(debug=True)
