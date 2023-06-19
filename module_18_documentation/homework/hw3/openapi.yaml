@@ -20,7 +20,7 @@ paths:
               $ref: '#/components/schemas/Calculator'
             examples:
               calculator:
-                summary: add new book
+                summary: Calculation
                 value: {"jsonrpc": "2.0",
                  "method": "calc.add",
                  "params": {"a": 5, "b": 3.3},
