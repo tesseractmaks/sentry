@@ -1,0 +1,110 @@
+openapi: "3.0.0"
+info:
+  title: Calculator
+  description: Nerealnoe
+  version: 0.0.1
+servers:
+  - url: http://127.0.0.1:5000
+    description: Dev server
+paths:
+  /api:
+    post:
+      tags:
+        - Calculator
+      summary: Method Calculation
+      description: Calculation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Calculator'
+            examples:
+              calculator:
+                summary: add new book
+                value: {"jsonrpc": "2.0",
+                 "method": "calc.add",
+                 "params": {"a": 5, "b": 3.3},
+                 "id": "1"}
+        description: Calculation
+        required: true
+      responses:
+        '200':
+          description: Calculator available methods - calc.add, calc.mul, calc.sub, calc.truediv
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Calculator'
+        '400':
+          description: Incorrect input
+        'default':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Nestandartnoe
+components:
+  schemas:
+    Calculator:
+      type: object
+      description: good
+      required:
+        - id
+        - jsonrpc
+        - method
+        - params
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        jsonrpc:
+          type: string
+          example: "2.0"
+        method:
+          type: string
+          enum: [calc.add, calc.mul, calc.sub, calc.truediv]
+        params:
+          type: object
+          properties:
+            a:
+              type: number
+              example: 2
+            b:
+              type: number
+              example: 3
+        result:
+          type: number
+          example: 5
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+  parameters:
+    calc:
+      name: calc
+      in: query
+      description: calculator parameters
+      schema:
+        type: object
+        properties:
+        id:
+          type: integer
+        jsonrpc:
+          type: string
+        method:
+          type: string
+        params:
+          type: object
+          properties:
+            a:
+              type: float
+            b:
+              type: float
+      required: true
