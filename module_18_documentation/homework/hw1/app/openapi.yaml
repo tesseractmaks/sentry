@@ -1,6 +1,6 @@
 openapi: "3.0.3"
 info:
-  title: Skillbox App Books
+  title: Skillbox App Book
   description: Nerealnoe
   version: 0.0.1
 servers:
@@ -11,11 +11,11 @@ paths:
     get:
       summary: Get list books
       tags:
-        - Books
+        - Book
       operationId: getAllBooks
       responses:
         '200':
-          description: Books data
+          description: Book data
           content:
             application/json:
               schema:
@@ -31,7 +31,7 @@ paths:
           description: Nestandartnoe
     post:
       tags:
-        - Books
+        - Book
       summary: Method created object of book
       description: Creaate a new book
       operationId: addBook
@@ -48,7 +48,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Books data
+          description: Book data
           content:
             application/json:
               schema:
@@ -68,7 +68,7 @@ paths:
     get:
       summary: Get list books
       tags:
-        - Books
+        - Book
       operationId: getBookById
       responses:
         '200':
@@ -88,7 +88,7 @@ paths:
     delete:
       summary: Delete book
       tags:
-        - Books
+        - Book
       operationId: deleteBookById
       responses:
         '200':
@@ -105,7 +105,7 @@ paths:
           description: Nestandartnoe
     put:
       tags:
-        - Books
+        - Book
       summary: Method replace object of book
       description: Replace a new book
       operationId: replaceBook
@@ -140,7 +140,7 @@ paths:
           description: Nestandartnoe
     patch:
       tags:
-        - Books
+        - Book
       summary: Method update object of book
       description: Update a new book
       operationId: updateBook

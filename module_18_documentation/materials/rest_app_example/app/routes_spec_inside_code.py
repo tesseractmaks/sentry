@@ -39,7 +39,7 @@ class BookList(Resource):
           - books
         responses:
           200:
-            description: Books data
+            description: Book data
             schema:
               type: array
               items:

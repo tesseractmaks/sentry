@@ -3,15 +3,19 @@ import os
 from sqlalchemy.exc import NoResultFound
 
 if __name__ == '__main__':
+    import datetime
+    import random
     from sqlalchemy import func, create_engine, Column, Integer, String, Date, Float, Boolean
     from sqlalchemy.orm import sessionmaker, declarative_base
     from sqlalchemy.ext.hybrid import hybrid_property
     from flask import Flask, jsonify, abort, request
-    from create_base import book_names, get_random_date, last_names, middle_names, first_names, generate_email, \
+    from create_base import book_names, \
+        get_random_date, \
+        last_names, \
+        middle_names, \
+        first_names, \
+        generate_email, \
         generate_phone
-
-    import datetime
-    import random
 
     app = Flask(__name__)
 

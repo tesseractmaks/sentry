@@ -52,7 +52,7 @@ coverage.xml
 .pytest_cache/
 cover/
 probe.py
-
+alchemy_examples.py
 # Translations
 *.mo
 *.pot
