@@ -132,7 +132,7 @@ template = spec.to_flasgger(
     definitions=[BookSchema, BookSchemaPatch],
 )
 
-# swagger = Swagger(app, template=template)
+# swagger = Swagger(app, templates=templates)
 
 swagger = Swagger(app, template=None, template_file="openapi.yaml")
 

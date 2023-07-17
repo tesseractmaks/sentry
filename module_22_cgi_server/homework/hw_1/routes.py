@@ -1,4 +1,5 @@
 import json
+
 from wsgiref import simple_server
 
 
@@ -32,3 +33,5 @@ httpd = simple_server.WSGIServer(
 )
 httpd.set_app(app)
 httpd.serve_forever()
+
+
