@@ -9,8 +9,9 @@ services:
     command:
       - "python"
       - "task_1.py"
-#  sentry:
-#    image: sentry:latest
-#    ports:
-#      - "9000:9000"
+  sentry:
+    image: sentry:latest
+    ports:
+      - "9000:9000"
+
 
